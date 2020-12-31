@@ -9,9 +9,16 @@ Original file is located at
 
 
 from transformers import AutoTokenizer, AutoModelWithLMHead
+from os import path
 
+MODEL_DIRECTORY = "/models/mrm8488-t5-base-finetuned-emotion"
 tokenizer = AutoTokenizer.from_pretrained("mrm8488/t5-base-finetuned-emotion", use_fast=False)
-model = AutoModelWithLMHead.from_pretrained("mrm8488/t5-base-finetuned-emotion")
+if not path.exists(MODEL_DIRECTORY):
+    model = AutoModelWithLMHead.from_pretrained("mrm8488/t5-base-finetuned-emotion")
+    model.save_pretrained(MODEL_DIRECTORY)
+else:
+    model = AutoModelWithLMHead.from_pretrained(MODEL_DIRECTORY)
+
 
 def get_emotion(text):
     input_ids = tokenizer.encode(text + '</s>', return_tensors='pt')

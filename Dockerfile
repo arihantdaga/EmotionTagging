@@ -25,14 +25,19 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 ENV FLASK_APP server.py
+ENV FLASK_RUN_HOST=0.0.0.0
+WORKDIR /code
 
 # Copy all the files from the project’s root to the working directory
-COPY src/ /src/
-RUN ls -la /src/*
-EXPOSE 5001 
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
+EXPOSE 5005
+COPY . .
+RUN ls -la
 ENTRYPOINT ["python3"]
 
 
 
 # Running Python Application
-CMD ["/src/server.py"]
+CMD ["src/server.py"]
